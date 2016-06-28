@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Automatic">
+    <entity name="MYTweet" representedClassName="MYTweet" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MYUser" inverseName="tweets" inverseEntity="MYUser" syncable="YES"/>
+    </entity>
+    <entity name="MYUser" representedClassName="MYUser" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profile_image_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="tweets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MYTweet" inverseName="user" inverseEntity="MYTweet" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MYTweet" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="MYUser" positionX="117" positionY="-186" width="128" height="103"/>
+    </elements>
+</model>
