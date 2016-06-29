@@ -33,7 +33,7 @@
         @weakify(self)
         self.refreshCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @strongify(self);
-            return [[self.services.twitterService updateFeed] doCompleted:^{
+            return [[self.services.twitterService updateFeedSignal] doCompleted:^{
                 [(RACSubject *)self.updatedContentSignal sendNext:nil];
             }];
         }];

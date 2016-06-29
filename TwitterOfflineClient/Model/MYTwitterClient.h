@@ -12,9 +12,9 @@
 @protocol MYTwitterClient <NSObject>
 
 - (RACSignal *)userSignal;
-- (RACSignal *)updateFeed;
-- (RACSignal *)postTweet:(NSString *)tweet;
-- (RACSignal *)feedAccessSignal;
-- (RACSignal *)feedSaveSignal:(NSArray *)feedData;
+- (RACSignal *)getFeedSignal;
+- (RACSignal *)persistFeedSignal:(NSArray *)feedData;
+- (RACSignal *)updateFeedSignal;
+- (RACSignal *)postTweetSignal:(NSString *)tweet;
 
 @end

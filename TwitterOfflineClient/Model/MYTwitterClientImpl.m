@@ -7,12 +7,14 @@
 //
 
 #import "MYTwitterClientImpl.h"
+
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
+
+#import "MYCoreDataStack.h"
 #import "MYTweet+CoreDataProperties.h"
 #import "MYUser+CoreDataProperties.h"
-#import "MYCoreDataStack.h"
 
 @implementation MYTwitterClientImpl
 
@@ -21,36 +23,36 @@
         if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
             [subscriber sendError:nil];
         }
-        ACAccountStore *accountStore = [[ACAccountStore alloc] init];
-        ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:
-                                      ACAccountTypeIdentifierTwitter];
-        
-        NSArray *twitterAccounts = [accountStore accountsWithAccountType:accountType];
-        
-        if (twitterAccounts.count) {
-            ACAccount *twitterAccount = [twitterAccounts lastObject];
+        ACAccount *twitterAccount = [self twitterAccount];
+        if (twitterAccount) {
             NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/account/verify_credentials.json"];
+            
             NSMutableDictionary *params = [NSMutableDictionary new];
             [params setObject:@"0" forKey:@"include_entities"];
             [params setObject:@"1" forKey:@"skip_status"];
             [params setObject:@"1" forKey:@"include_email"];
             
-            SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET URL:url parameters:params];
+            SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                                    requestMethod:SLRequestMethodGET
+                                                              URL:url
+                                                       parameters:params];
             [request setAccount:twitterAccount];
-            [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+            [request performRequestWithHandler:^(NSData *responseData,
+                                                 NSHTTPURLResponse *urlResponse,
+                                                 NSError *error) {
                 if (responseData) {
-                    NSDictionary *twitterData = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingAllowFragments error:NULL];
-                    [subscriber sendNext:twitterData];
+                    NSDictionary *userInfo = [NSJSONSerialization JSONObjectWithData:responseData
+                                                                             options:NSJSONReadingAllowFragments
+                                                                               error:NULL];
+                    [subscriber sendNext:userInfo];
                 }
             }];
         }
-        return [RACDisposable disposableWithBlock:^{
-            
-        }];
+        return [RACDisposable disposableWithBlock:^{}];
     }];
 }
 
-- (RACSignal *)feedAccessSignal {
+- (RACSignal *)getFeedSignal {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
             [subscriber sendError:nil];
@@ -71,9 +73,8 @@
                                                         requestMethod:SLRequestMethodGET
                                                                   URL:url
                                                            parameters:params];
-                NSArray *twitterAccounts = [accountStore accountsWithAccountType:accountType];
-                if (twitterAccounts.count > 0) {
-                    ACAccount *twitterAccount = [twitterAccounts lastObject];
+                ACAccount *twitterAccount = [self twitterAccount];
+                if (twitterAccount) {
                     [request setAccount:twitterAccount];
                     
                     [request performRequestWithHandler: ^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
@@ -104,13 +105,11 @@
             }
         }];
 
-        return [RACDisposable disposableWithBlock:^{
-            
-        }];
+        return [RACDisposable disposableWithBlock:^{}];
     }];
 }
 
-- (RACSignal *)feedSaveSignal:(NSArray *)feedData {
+- (RACSignal *)persistFeedSignal:(NSArray *)feedData {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSManagedObjectContext *moc = [MYCoreDataStack defaultStack].managedObjectContext;
         for (NSDictionary *tweetInfo in feedData) {
@@ -152,31 +151,28 @@
     }];
 }
 
-- (RACSignal *)updateFeed {
-    return [[self feedAccessSignal] flattenMap:^RACStream *(NSArray *feedData) {
-        return [self feedSaveSignal:feedData];
+- (RACSignal *)updateFeedSignal {
+    return [[self getFeedSignal] flattenMap:^RACStream *(NSArray *feedData) {
+        return [self persistFeedSignal:feedData];
     }];
 }
 
-- (RACSignal *)postTweet:(NSString *)tweet {
+- (RACSignal *)postTweetSignal:(NSString *)tweet {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         ACAccountStore *account = [[ACAccountStore alloc] init];
-        ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:
-                                      ACAccountTypeIdentifierTwitter];
+        ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
         
-        [account requestAccessToAccountsWithType:accountType options:nil
+        [account requestAccessToAccountsWithType:accountType
+                                         options:nil
                                       completion:^(BOOL granted, NSError *error) {
-             if (granted == YES) {
-                 NSArray *twitterAccounts = [account accountsWithAccountType:accountType];
-                 if (twitterAccounts.count > 0) {
-                     ACAccount *twitterAccount = [twitterAccounts lastObject];
-                     NSDictionary *message = @{@"status": tweet};
+             if (granted) {
+                 ACAccount *twitterAccount = [self twitterAccount];
+                 if (twitterAccount) {
                      NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
-
                      SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter
                                                                  requestMethod:SLRequestMethodPOST
-                                                                           URL:requestURL parameters:message];
-                     
+                                                                           URL:requestURL
+                                                                    parameters:@{@"status": tweet}];
                      postRequest.account = twitterAccount;
                      
                      [postRequest performRequestWithHandler:^(NSData *responseData,
@@ -186,8 +182,6 @@
                       }];
                  }
              }
-                                          
-            //[subscriber sendNext:nil];
         }];
         
         return [RACDisposable disposableWithBlock:^{
@@ -196,6 +190,17 @@
 }
 
 #pragma mark - Helpers
+
+- (ACAccount *)twitterAccount {
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+    ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    NSArray *twitterAccounts = [accountStore accountsWithAccountType:accountType];
+    
+    if (twitterAccounts.count) {
+        return [twitterAccounts lastObject];
+    }
+    return nil;
+}
 
 - (NSDate *)dateFromString:(NSString *)dateString {
     NSDateFormatter *dateFormatter= [NSDateFormatter new];

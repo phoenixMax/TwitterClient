@@ -33,11 +33,11 @@
 }
 
 - (RACSignal *)postTweetSignal {
-    return [self.services.twitterService postTweet:self.contentText];
+    return [self.services.twitterService postTweetSignal:self.contentText];
 }
 
 - (RACSignal *)updateFeedSignal {
-    return [self.services.twitterService updateFeed];
+    return [self.services.twitterService updateFeedSignal];
 }
 
 @end

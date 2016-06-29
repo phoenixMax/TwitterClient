@@ -18,26 +18,23 @@
 
 @implementation MYTwitterAccessViewController
 
-- (instancetype)initWithModel:(MYTwitterAccessViewModel *)viewModel
-{
-    if (self = [super init])
-    {
+- (instancetype)initWithModel:(MYTwitterAccessViewModel *)viewModel {
+    if (self = [super init]) {
         _viewModel = viewModel;
     }
     
     return self;
 }
 
-- (void)setupViewModel:(MYTwitterAccessViewModel *)viewModel
-{
+- (void)setupViewModel:(MYTwitterAccessViewModel *)viewModel {
     self.viewModel = viewModel;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationController.navigationBarHidden = YES;
+    [self performTwitterButtonAnimation];
     [NSTimer scheduledTimerWithTimeInterval:5
                                      target:self
                                    selector:@selector(performTwitterButtonAnimation)
@@ -58,8 +55,7 @@
     [self.twitterButton.layer addAnimation:animation forKey:nil];
 }
 
-- (void)bindViewModel
-{
+- (void)bindViewModel {
     self.twitterButton.rac_command = self.viewModel.executeFeedAccess;
 }
 

@@ -38,13 +38,13 @@
 
 - (void)initialize {
     self.executeFeedAccess = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-        return [self executeFeedAccessSignal];
+        return [self executeFeedSignal];
     }];
 }
 
-- (RACSignal *)executeFeedAccessSignal {
-    return [[[[[[self.services twitterService] feedAccessSignal] flattenMap:^RACStream *(NSArray *feedData) {
-        return [[self.services twitterService] feedSaveSignal:feedData];
+- (RACSignal *)executeFeedSignal {
+    return [[[[[[self.services twitterService] getFeedSignal] flattenMap:^RACStream *(NSArray *feedData) {
+        return [[self.services twitterService] persistFeedSignal:feedData];
     }] deliverOnMainThread] doCompleted:^ {
         MYTwitterFeedViewModel *feedViewModel = [[MYTwitterFeedViewModel alloc] initWithModel:[MYCoreDataStack defaultStack].managedObjectContext services:self.services];
         [self.services pushViewModel:feedViewModel];
