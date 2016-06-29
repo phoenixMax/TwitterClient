@@ -1,4 +1,5 @@
 PODS:
+  - Kiwi (2.4.0)
   - libextobjc (0.4.1):
     - libextobjc/EXTADT (= 0.4.1)
     - libextobjc/EXTConcreteProtocol (= 0.4.1)
@@ -45,11 +46,13 @@ PODS:
     - ReactiveCocoa (~> 2.4)
 
 DEPENDENCIES:
+  - Kiwi (~> 2.4)
   - libextobjc (~> 0.4)
   - ReactiveCocoa (= 2.5)
   - ReactiveViewModel (~> 0.3)
 
 SPEC CHECKSUMS:
+  Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   ReactiveViewModel: 58918dcbcec2d3151195ab1ed9163c57a8163999

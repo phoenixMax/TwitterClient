@@ -6,3 +6,6 @@ target 'TwitterOfflineClient' do
  pod 'libextobjc', '~> 0.4'
 end
 
+target 'TwitterOfflineClientTests' do
+ pod 'Kiwi', '~> 2.4'
+end
