@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSString *sid;
 @property (nullable, nonatomic, retain) NSString *text;
-@property (nullable, nonatomic, retain) NSString *created_at;
+@property (nullable, nonatomic, retain) NSDate *created_at;
 @property (nullable, nonatomic, retain) MYUser *user;
 
 @end

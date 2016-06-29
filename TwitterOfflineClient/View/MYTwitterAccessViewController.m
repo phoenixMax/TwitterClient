@@ -51,7 +51,7 @@
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.duration = 0.125;
-    animation.repeatCount = 5;
+    animation.repeatCount = 3;
     animation.autoreverses = YES;
     animation.removedOnCompletion = YES;
     animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.5, 1.5, 1.0)];

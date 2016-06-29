@@ -13,6 +13,7 @@
 
 - (RACSignal *)userSignal;
 - (RACSignal *)updateFeed;
+- (RACSignal *)postTweet:(NSString *)tweet;
 - (RACSignal *)feedAccessSignal;
 - (RACSignal *)feedSaveSignal:(NSArray *)feedData;
 

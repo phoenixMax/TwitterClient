@@ -15,6 +15,8 @@
 		184400BD1D225248002A2310 /* MYUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 184400B71D225248002A2310 /* MYUser.m */; };
 		184400BF1D225248002A2310 /* MYTweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 184400BB1D225248002A2310 /* MYTweet.m */; };
 		184400C21D22E143002A2310 /* MYTweet+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 184400C11D22E143002A2310 /* MYTweet+CoreDataProperties.m */; };
+		184400C51D2304C5002A2310 /* MYTwitterComposerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184400C41D2304C5002A2310 /* MYTwitterComposerViewController.m */; };
+		184400C81D230823002A2310 /* MYTwitterShareViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 184400C71D230823002A2310 /* MYTwitterShareViewModel.m */; };
 		186AAA881D2164D400DF4372 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 186AAA871D2164D400DF4372 /* main.m */; };
 		186AAA8B1D2164D400DF4372 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 186AAA8A1D2164D400DF4372 /* AppDelegate.m */; };
 		186AAA911D2164D400DF4372 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 186AAA8F1D2164D400DF4372 /* Main.storyboard */; };
@@ -49,6 +51,10 @@
 		184400BB1D225248002A2310 /* MYTweet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MYTweet.m; sourceTree = "<group>"; };
 		184400C01D22E143002A2310 /* MYTweet+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MYTweet+CoreDataProperties.h"; sourceTree = "<group>"; };
 		184400C11D22E143002A2310 /* MYTweet+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MYTweet+CoreDataProperties.m"; sourceTree = "<group>"; };
+		184400C31D2304C5002A2310 /* MYTwitterComposerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MYTwitterComposerViewController.h; sourceTree = "<group>"; };
+		184400C41D2304C5002A2310 /* MYTwitterComposerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MYTwitterComposerViewController.m; sourceTree = "<group>"; };
+		184400C61D230823002A2310 /* MYTwitterShareViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MYTwitterShareViewModel.h; sourceTree = "<group>"; };
+		184400C71D230823002A2310 /* MYTwitterShareViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MYTwitterShareViewModel.m; sourceTree = "<group>"; };
 		186AAA831D2164D400DF4372 /* TwitterOfflineClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterOfflineClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		186AAA871D2164D400DF4372 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		186AAA891D2164D400DF4372 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -157,6 +163,8 @@
 				186AAAAB1D217FAA00DF4372 /* MYTwitterFeedViewController.m */,
 				186AAAB11D2185B100DF4372 /* MYTwitterAccessViewController.h */,
 				186AAAB21D2185B100DF4372 /* MYTwitterAccessViewController.m */,
+				184400C31D2304C5002A2310 /* MYTwitterComposerViewController.h */,
+				184400C41D2304C5002A2310 /* MYTwitterComposerViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -168,6 +176,8 @@
 				186AAAAF1D21813700DF4372 /* MYTwitterFeedViewModel.m */,
 				184400941D218952002A2310 /* MYTwitterAccessViewModel.h */,
 				184400951D218952002A2310 /* MYTwitterAccessViewModel.m */,
+				184400C61D230823002A2310 /* MYTwitterShareViewModel.h */,
+				184400C71D230823002A2310 /* MYTwitterShareViewModel.m */,
 				184400971D21AA50002A2310 /* MYViewModelServices.h */,
 			);
 			path = ViewModel;
@@ -317,6 +327,7 @@
 				186AAA8B1D2164D400DF4372 /* AppDelegate.m in Sources */,
 				186AAA941D2164D400DF4372 /* TwitterOfflineClient.xcdatamodeld in Sources */,
 				184400961D218952002A2310 /* MYTwitterAccessViewModel.m in Sources */,
+				184400C51D2304C5002A2310 /* MYTwitterComposerViewController.m in Sources */,
 				186AAAB31D2185B100DF4372 /* MYTwitterAccessViewController.m in Sources */,
 				184400BD1D225248002A2310 /* MYUser.m in Sources */,
 				186AAAAC1D217FAA00DF4372 /* MYTwitterFeedViewController.m in Sources */,
@@ -325,6 +336,7 @@
 				184400A11D21B15E002A2310 /* MYTwitterClientImpl.m in Sources */,
 				184400A41D21B673002A2310 /* MYViewModelServicesImpl.m in Sources */,
 				184400BC1D225248002A2310 /* MYUser+CoreDataProperties.m in Sources */,
+				184400C81D230823002A2310 /* MYTwitterShareViewModel.m in Sources */,
 				186AAAB01D21813700DF4372 /* MYTwitterFeedViewModel.m in Sources */,
 				186AAA881D2164D400DF4372 /* main.m in Sources */,
 				184400C21D22E143002A2310 /* MYTweet+CoreDataProperties.m in Sources */,

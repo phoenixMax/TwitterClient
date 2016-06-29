@@ -7,6 +7,9 @@
 //
 
 #import "MYTwitterFeedViewController.h"
+#import "MYTwitterComposerViewController.h"
+#import "MYTwitterShareViewModel.h"
+#import "MYViewModelServicesImpl.h"
 
 @interface MYTwitterFeedViewController ()
 
@@ -30,6 +33,10 @@
     
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.hidesBackButton = YES;
+    UIBarButtonItem *composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                                          target:self
+                                                                                          action:@selector(composeTweet)];
+    self.navigationItem.rightBarButtonItem = composeBarButtonItem;
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
@@ -52,6 +59,17 @@
     }];
     
     self.viewModel.active = YES;
+}
+
+#pragma mark - Helpers
+
+- (void)composeTweet {
+    MYViewModelServicesImpl *viewModelServices = [[MYViewModelServicesImpl alloc] initWithNavigationController:self.navigationController];
+    MYTwitterShareViewModel *viewModel = [[MYTwitterShareViewModel alloc] initWithServices:viewModelServices];
+    MYTwitterComposerViewController *composeVC = [[MYTwitterComposerViewController alloc] initWithViewModel:viewModel];
+    composeVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    //composeVC.placeholder = @"What's happening?";
+    [self.navigationController presentViewController:composeVC animated:YES completion:nil];
 }
 
 #pragma mark - Table View

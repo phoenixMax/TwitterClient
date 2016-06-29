@@ -126,7 +126,7 @@
                 tweet.sid = sid;
             }
             tweet.text = tweetInfo[@"text"];
-            tweet.created_at = tweetInfo[@"created_at"];
+            tweet.created_at = [self dateFromString:tweetInfo[@"created_at"]];
             
             NSDictionary *userInfo = tweetInfo[@"user"];
             sid = userInfo[@"id_str"];
@@ -156,6 +156,53 @@
     return [[self feedAccessSignal] flattenMap:^RACStream *(NSArray *feedData) {
         return [self feedSaveSignal:feedData];
     }];
+}
+
+- (RACSignal *)postTweet:(NSString *)tweet {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        ACAccountStore *account = [[ACAccountStore alloc] init];
+        ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:
+                                      ACAccountTypeIdentifierTwitter];
+        
+        [account requestAccessToAccountsWithType:accountType options:nil
+                                      completion:^(BOOL granted, NSError *error) {
+             if (granted == YES) {
+                 NSArray *twitterAccounts = [account accountsWithAccountType:accountType];
+                 if (twitterAccounts.count > 0) {
+                     ACAccount *twitterAccount = [twitterAccounts lastObject];
+                     NSDictionary *message = @{@"status": tweet};
+                     NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+
+                     SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                                                 requestMethod:SLRequestMethodPOST
+                                                                           URL:requestURL parameters:message];
+                     
+                     postRequest.account = twitterAccount;
+                     
+                     [postRequest performRequestWithHandler:^(NSData *responseData,
+                                                              NSHTTPURLResponse *urlResponse, NSError *error) {
+                          NSLog(@"HTTP Response: %li", (long)[urlResponse statusCode]);
+                         [subscriber sendNext:responseData];
+                      }];
+                 }
+             }
+                                          
+            //[subscriber sendNext:nil];
+        }];
+        
+        return [RACDisposable disposableWithBlock:^{
+        }];
+    }];
+}
+
+#pragma mark - Helpers
+
+- (NSDate *)dateFromString:(NSString *)dateString {
+    NSDateFormatter *dateFormatter= [NSDateFormatter new];
+    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    [dateFormatter setDateFormat:@"EEE MMM dd HH:mm:ss Z yyyy"];
+    
+   return [dateFormatter dateFromString:dateString];
 }
 
 @end
